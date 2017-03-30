@@ -57,7 +57,7 @@ public class ModuloJdbcRepository implements ModuloRepository {
     
     private static final String GET_ACCES_MODULES_PER_USER= "SELECT distinct \n"+ 
     		 " M.IdModulo,M.Codigo, M.HelpUrl,  M.EtiquetaMenu, M.Nombre, M.Url, M.Orden,M.ImageClass, \n"+
-    		 " Convert(BIT,ISNULL(n.TieneSubModulo,0)) tieneSubMenu \n"+
+    		 " COALESCE(n.TieneSubModulo,0) tieneSubMenu  \n"+
     		 " FROM Modulo M \n"+
     		 " LEFT JOIN (SELECT DISTINCT 1 TieneSubModulo,a.IdModulo \n"+ 
     		 "				FROM Modulo a \n"+
