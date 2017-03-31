@@ -1,4 +1,4 @@
-
+.gradle
 /build/
 !gradle/wrapper/gradle-wrapper.jar
 
@@ -27,6 +27,6 @@ nbdist/
 /bin/
 classes/
 *.zip
-/build.gradle
+
 
 npm-debug.log
