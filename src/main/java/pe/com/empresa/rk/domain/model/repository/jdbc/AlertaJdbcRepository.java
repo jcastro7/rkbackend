@@ -32,7 +32,7 @@ public class AlertaJdbcRepository implements AlertaRepository {
     private static final Logger LOGGER = LoggerFactory.getLogger(AlertaJdbcRepository.class);
 
     private final NamedParameterJdbcTemplate jdbcTemplate;
-    
+
     @Autowired
     DataSource dataSource;
 
@@ -74,24 +74,24 @@ public class AlertaJdbcRepository implements AlertaRepository {
 
         sql.append(" WHERE 1=1 ");
 
-        sql.append(params.filter(" AND A.Codigo = :codigo ",codigo));
+        sql.append(params.filter(" AND A.Codigo = :codigo ", codigo));
 
         return sql.toString();
     }
 
 
-	@Override
-	public List<AlertaResultViewModel> obtenerAlertas(AlertaFilterViewModel dto) {
-		WhereParams params = new WhereParams();
+    @Override
+    public List<AlertaResultViewModel> obtenerAlertas(AlertaFilterViewModel dto) {
+        WhereParams params = new WhereParams();
         String sql = generarBusquedaAlerta(dto, params);
 
         return jdbcTemplate.query(sql.toString(),
                 params.getParams(), new BeanPropertyRowMapper<AlertaResultViewModel>(AlertaResultViewModel.class));
-	}
+    }
 
 
-	private String generarBusquedaAlerta(AlertaFilterViewModel dto, WhereParams params) {
-		StringBuilder sql = new StringBuilder();
+    private String generarBusquedaAlerta(AlertaFilterViewModel dto, WhereParams params) {
+        StringBuilder sql = new StringBuilder();
         sql.append(" SELECT ");
         sql.append(" A.IdAlerta AS idAlerta, ");
         sql.append(" A.Codigo as codigo, ");
@@ -103,42 +103,38 @@ public class AlertaJdbcRepository implements AlertaRepository {
         sql.append(" LEFT JOIN TablaGeneral TipoNotificacion ON A.TipoNotificacion=TipoNotificacion.Codigo and TipoNotificacion.GRUPO='Alerta.TipoNotificacion'");
 
         sql.append(" WHERE 1=1 ");
-        sql.append(params.filter(" AND A.TipoNotificacion = :codigoTipoNotificacion ",dto.getTipoNotificacion()));
-        sql.append(params.filter(" AND A.Estado = :estado ",dto.getEstado()));
-        
+        sql.append(params.filter(" AND A.TipoNotificacion = :codigoTipoNotificacion ", dto.getTipoNotificacion()));
+        sql.append(params.filter(" AND A.Estado = :estado ", dto.getEstado()));
+
         return sql.toString();
-	}
+    }
 
 
-	@Override
-	public List<AlertaEmpleadoViewModel> obtenerAlertaEmpleado(Long idEmpleado) {
-		SimpleJdbcCall jdbcCall = new SimpleJdbcCall(dataSource).withProcedureName("spuAlertasEmpleadosPendientes")
-	    		   //.withCatalogName("dbo")
-	    		   .returningResultSet("MensajeAlerta",new BeanPropertyRowMapper<AlertaEmpleadoViewModel>(AlertaEmpleadoViewModel.class))
-	    		   /*.declareParameters(new SqlParameter("idAlerta", Types.NUMERIC),
-	    				              new SqlParameter("idEmpleado", Types.NUMERIC))*/
-	    		   ;
-		  SqlParameterSource in = new MapSqlParameterSource().addValue("idEmpleado", idEmpleado,Types.NUMERIC);
-		  
-	       Map<String, Object> out = jdbcCall.execute(in);
-	       List<AlertaEmpleadoViewModel> lista = (List<AlertaEmpleadoViewModel>)out.get("MensajeAlerta");
-	             
-	       return lista;
-	}
+    @Override
+    public List<AlertaEmpleadoViewModel> obtenerAlertaEmpleado(Long idEmpleado) {
+        SimpleJdbcCall jdbcCall = new SimpleJdbcCall(dataSource).withProcedureName("spuAlertasEmpleadosPendientes")
+                .returningResultSet("MensajeAlerta", new BeanPropertyRowMapper<AlertaEmpleadoViewModel>(AlertaEmpleadoViewModel.class));
+        SqlParameterSource in = new MapSqlParameterSource().addValue("idEmpleado", idEmpleado, Types.NUMERIC);
+
+        Map<String, Object> out = jdbcCall.execute(in);
+        List<AlertaEmpleadoViewModel> lista = (List<AlertaEmpleadoViewModel>) out.get("MensajeAlerta");
+
+        return lista;
+    }
 
 
-	public List<AlertaSubscriptorViewModel> obtenerSubscriptoresAlertas(AlertaViewModel dto) {
-		WhereParams params = new WhereParams();
+    public List<AlertaSubscriptorViewModel> obtenerSubscriptoresAlertas(AlertaViewModel dto) {
+        WhereParams params = new WhereParams();
         String sql = generarBusquedaSubscriptoresAlertas(dto, params);
 
         return jdbcTemplate.query(sql.toString(),
                 params.getParams(), new BeanPropertyRowMapper<AlertaSubscriptorViewModel>(AlertaSubscriptorViewModel.class));
-	}
+    }
 
 
-	private String generarBusquedaSubscriptoresAlertas(AlertaViewModel dto, WhereParams params) {
-		StringBuilder sql = new StringBuilder();
-		
+    private String generarBusquedaSubscriptoresAlertas(AlertaViewModel dto, WhereParams params) {
+        StringBuilder sql = new StringBuilder();
+
         sql.append(" SELECT distinct A.IdAlerta AS idAlerta, ");
         sql.append(" EMP.Nombre+' '+EMP.ApellidoPaterno+' '+EMP.ApellidoMaterno AS nombreEmpleado, ");
         sql.append(" RMS.IdAlertaSubscriptor as idAlertaSubscriptor, ");
@@ -152,8 +148,8 @@ public class AlertaJdbcRepository implements AlertaRepository {
         sql.append(" LEFT JOIN Alerta A ON A.IdAlerta=RMS.IdAlerta ");
         sql.append(" LEFT JOIN Empleado EMP ON RMS.IdEmpleado = EMP.IdEmpleado ");
         sql.append(" WHERE 1=1 ");
-        sql.append(params.filter(" AND A.IdAlerta = :idAlerta ",dto.getIdAlerta()));
-        
+        sql.append(params.filter(" AND A.IdAlerta = :idAlerta ", dto.getIdAlerta()));
+
         return sql.toString();
-	}
+    }
 }
