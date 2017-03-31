@@ -76,7 +76,7 @@ public class CompensacionJdbcRepository implements CompensacionRepository {
         sql.append(" FROM EmpleadoCompensacion EMPCOM ");
         sql.append(" LEFT JOIN Empleado EMP ON EMP.IdEmpleado = EMPCOM.IdEmpleado ");
              
-        sql.append(" LEFT JOIN HistorialLaboral HISTORIAL ON HISTORIAL.IdEmpleado = EMP.IdEmpleado AND ((HISTORIAL.FechaInicio < getdate() AND HISTORIAL.FechaFin > getDate()) OR (HISTORIAL.FechaInicio < getdate() AND HISTORIAL.FechaFin IS NULL)) ");
+        sql.append(" LEFT JOIN HistorialLaboral HISTORIAL ON HISTORIAL.IdEmpleado = EMP.IdEmpleado AND ((HISTORIAL.FechaInicio < now() AND HISTORIAL.FechaFin > now()) OR (HISTORIAL.FechaInicio < now() AND HISTORIAL.FechaFin IS NULL)) ");
         
         sql.append(" LEFT JOIN Proyecto PROY ON PROY.IdProyecto = HISTORIAL.IdProyecto ");
         sql.append(" LEFT JOIN DepartamentoArea DEP ON DEP.IdDepartamentoArea = HISTORIAL.IdDepartamentoArea ");
@@ -161,7 +161,7 @@ public class CompensacionJdbcRepository implements CompensacionRepository {
         sql.append(" FROM EmpleadoCompensacion EMPCOM ");
         sql.append(" LEFT JOIN Empleado EMP ON EMP.IdEmpleado = EMPCOM.IdEmpleado ");
              
-        sql.append(" LEFT JOIN HistorialLaboral HISTORIAL ON HISTORIAL.IdEmpleado = EMP.IdEmpleado AND ((HISTORIAL.FechaInicio < getdate() AND HISTORIAL.FechaFin > getDate()) OR (HISTORIAL.FechaInicio < getdate() AND HISTORIAL.FechaFin IS NULL)) ");
+        sql.append(" LEFT JOIN HistorialLaboral HISTORIAL ON HISTORIAL.IdEmpleado = EMP.IdEmpleado AND ((HISTORIAL.FechaInicio < now() AND HISTORIAL.FechaFin > now()) OR (HISTORIAL.FechaInicio < now() AND HISTORIAL.FechaFin IS NULL)) ");
         
         sql.append(" LEFT JOIN Proyecto PROY ON PROY.IdProyecto = HISTORIAL.IdProyecto ");
         sql.append(" LEFT JOIN DepartamentoArea DEP ON DEP.IdDepartamentoArea = HISTORIAL.IdDepartamentoArea ");

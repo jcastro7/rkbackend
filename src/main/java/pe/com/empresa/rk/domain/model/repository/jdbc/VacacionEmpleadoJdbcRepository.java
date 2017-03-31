@@ -60,7 +60,7 @@ public class VacacionEmpleadoJdbcRepository implements VacacionEmpleadoRepositor
 		sql.append("  pe.DiasVacacionesDisponibles AS diasVacacionesDisponibles ");
 		sql.append("  FROM ");
 		sql.append("  PeriodoEmpleado pe");
-		//sql.append("  WHERE (pe.FechaInicio<= getdate() AND pe.FechaFin>= getdate()) ");
+		//sql.append("  WHERE (pe.FechaInicio<= now() AND pe.FechaFin>= now()) ");
 		sql.append(" WHERE ");
 		sql.append("   pe.IdEmpleado="+empleadoDto.getIdEmpleado()+" order by pe.FechaInicio desc");
 
@@ -92,7 +92,7 @@ public class VacacionEmpleadoJdbcRepository implements VacacionEmpleadoRepositor
 		sql.append("  pe.Periodo AS periodo ");
 		sql.append("  FROM ");
 		sql.append("  PeriodoEmpleado pe");
-		//sql.append("  WHERE (pe.FechaInicio<= getdate() AND pe.FechaFin>= getdate()) ");
+		//sql.append("  WHERE (pe.FechaInicio<= now() AND pe.FechaFin>= now()) ");
 		sql.append(" WHERE ");
 		sql.append(" DiasVacacionesDisponibles>0 ");
 		sql.append("  AND pe.IdEmpleado="+empleado.getIdEmpleado() +" order by pe.FechaInicio asc");
@@ -215,7 +215,7 @@ public class VacacionEmpleadoJdbcRepository implements VacacionEmpleadoRepositor
         
         sql.append(" LEFT JOIN Empleado ATENDIDO ON va.IdAtendidoPor = ATENDIDO.IdEmpleado ");
         
-        sql.append(" LEFT JOIN HistorialLaboral HISTORIAL ON HISTORIAL.IdEmpleado = EMPLEADO.IdEmpleado AND ((HISTORIAL.FechaInicio < getdate() AND HISTORIAL.FechaFin > getDate()) AND (HISTORIAL.FechaInicio < getdate() AND HISTORIAL.FechaFin IS NULL)) ");
+        sql.append(" LEFT JOIN HistorialLaboral HISTORIAL ON HISTORIAL.IdEmpleado = EMPLEADO.IdEmpleado AND ((HISTORIAL.FechaInicio < now() AND HISTORIAL.FechaFin > now()) AND (HISTORIAL.FechaInicio < now() AND HISTORIAL.FechaFin IS NULL)) ");
         
         sql.append(" LEFT JOIN Proyecto PROY ON PROY.IdProyecto = HISTORIAL.IdProyecto ");
         sql.append(" LEFT JOIN DepartamentoArea DEP ON DEP.IdDepartamentoArea = HISTORIAL.IdDepartamentoArea ");
@@ -273,7 +273,7 @@ public class VacacionEmpleadoJdbcRepository implements VacacionEmpleadoRepositor
         
         sql.append(" LEFT JOIN Empleado ATENDIDO ON va.IdAtendidoPor = ATENDIDO.IdEmpleado ");
         
-        sql.append(" LEFT JOIN HistorialLaboral HISTORIAL ON HISTORIAL.IdEmpleado = EMPLEADO.IdEmpleado AND ((HISTORIAL.FechaInicio < getdate() AND HISTORIAL.FechaFin > getDate()) OR (HISTORIAL.FechaInicio < getdate() AND HISTORIAL.FechaFin IS NULL)) ");
+        sql.append(" LEFT JOIN HistorialLaboral HISTORIAL ON HISTORIAL.IdEmpleado = EMPLEADO.IdEmpleado AND ((HISTORIAL.FechaInicio < now() AND HISTORIAL.FechaFin > now()) OR (HISTORIAL.FechaInicio < now() AND HISTORIAL.FechaFin IS NULL)) ");
         
         sql.append(" LEFT JOIN Proyecto PROY ON PROY.IdProyecto = HISTORIAL.IdProyecto ");
         sql.append(" LEFT JOIN DepartamentoArea DEP ON DEP.IdDepartamentoArea = HISTORIAL.IdDepartamentoArea ");

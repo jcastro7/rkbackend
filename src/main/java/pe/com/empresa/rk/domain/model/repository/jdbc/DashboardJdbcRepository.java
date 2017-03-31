@@ -1,5 +1,6 @@
 package pe.com.empresa.rk.domain.model.repository.jdbc;
 
+import com.sun.org.apache.bcel.internal.generic.ARRAYLENGTH;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -13,6 +14,7 @@ import pe.com.empresa.rk.view.model.*;
 import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -141,11 +143,13 @@ public class DashboardJdbcRepository {
 	}
 
 	public List<PieChartDataResultViewModel> busquedaPieChartDashboardRHHH(MarcacionDashboardFilterViewModel busquedaMarcacionDto) {
-		WhereParams params = new WhereParams();
-        String sql = busquedaPieChartDashboardRRHH(busquedaMarcacionDto, params);
+		//TODO revisar luego este query
+	    //WhereParams params = new WhereParams();
+        //String sql = busquedaPieChartDashboardRRHH(busquedaMarcacionDto, params);
 
-        return jdbcTemplate.query(sql,
-                params.getParams(), new BeanPropertyRowMapper<>(PieChartDataResultViewModel.class));
+        //return jdbcTemplate.query(sql,
+          //      params.getParams(), new BeanPropertyRowMapper<>(PieChartDataResultViewModel.class));
+        return new ArrayList<>();
 	}
 
 	private String busquedaPieChartDashboardRRHH(MarcacionDashboardFilterViewModel busquedaMarcacionDto,WhereParams params) {
@@ -227,7 +231,8 @@ public class DashboardJdbcRepository {
         sql.append(" LEFT JOIN TablaGeneral MOTIVO ON pe.MOTIVO=MOTIVO.Codigo and MOTIVO.GRUPO='Permiso.Tipo'");
         sql.append(" LEFT JOIN PeriodoEmpleado PERIODO_EMPLEADO ON pe.IdPeriodoEmpleado = PERIODO_EMPLEADO.IdPeriodoEmpleado ");
         sql.append(" LEFT JOIN Empleado EMPLEADO ON PERIODO_EMPLEADO.IdEmpleado = EMPLEADO.IdEmpleado ");
-        sql.append(" LEFT JOIN HistorialLaboral HISTORIAL ON HISTORIAL.IdEmpleado = EMPLEADO.IdEmpleado AND (HISTORIAL.FechaInicio < getdate() OR HISTORIAL.FechaFin > getDate()) ");
+        sql.append(" LEFT JOIN HistorialLaboral HISTORIAL ON HISTORIAL.IdEmpleado = EMPLEADO.IdEmpleado AND (HISTORIAL.FechaInicio < NOW()" +
+                " OR HISTORIAL.FechaFin > NOW()) ");
         sql.append(" LEFT JOIN Proyecto PROY ON PROY.IdProyecto = HISTORIAL.IdProyecto ");
         sql.append(" LEFT JOIN DepartamentoArea DEP ON DEP.IdDepartamentoArea = HISTORIAL.IdDepartamentoArea ");
         sql.append(" LEFT JOIN UnidadDeNegocio UN ON UN.IdUnidadDeNegocio = HISTORIAL.IdUnidadDeNegocio ");
@@ -236,7 +241,7 @@ public class DashboardJdbcRepository {
 		sql.append(" LEFT JOIN Empleado eun on UN.IdJefe = eun.IdEmpleado ");
         sql.append(" Where 1=1 ");
         sql.append(params.filter(" AND (UN.IdJefe = :idJefe OR DEP.IdJefe = :idJefe OR PROY.IdJefe = :idJefe )",busquedaPermisoEmpleadoDto.getIdEmpleado()));
-        sql.append(" AND MONTH(pe.Fecha) = MONTH(GETDATE()) AND YEAR(pe.Fecha) = YEAR(GETDATE()) ");
+        sql.append(" AND MONTH(pe.Fecha) = MONTH(NOW()) AND YEAR(pe.Fecha) = YEAR(NOW()) ");
         sql.append(" ORDER BY nombreEmpleado");
 
         return sql.toString();
@@ -273,7 +278,7 @@ public class DashboardJdbcRepository {
         sql.append(" LEFT JOIN PeriodoEmpleado PERIODO_EMPLEADO ON va.IdPeriodoEmpleado = PERIODO_EMPLEADO.IdPeriodoEmpleado ");
         sql.append(" LEFT JOIN Empleado EMPLEADO ON PERIODO_EMPLEADO.IdEmpleado = EMPLEADO.IdEmpleado ");
         sql.append(" LEFT JOIN Empleado ATENDIDO ON va.IdAtendidoPor = ATENDIDO.IdEmpleado ");
-        sql.append(" LEFT JOIN HistorialLaboral HISTORIAL ON HISTORIAL.IdEmpleado = EMPLEADO.IdEmpleado AND ((HISTORIAL.FechaInicio < getdate() AND HISTORIAL.FechaFin > getDate()) OR (HISTORIAL.FechaInicio < getdate() AND HISTORIAL.FechaFin IS NULL)) ");
+        sql.append(" LEFT JOIN HistorialLaboral HISTORIAL ON HISTORIAL.IdEmpleado = EMPLEADO.IdEmpleado AND ((HISTORIAL.FechaInicio < NOW() AND HISTORIAL.FechaFin > NOW()) OR (HISTORIAL.FechaInicio < NOW() AND HISTORIAL.FechaFin IS NULL)) ");
         sql.append(" LEFT JOIN Proyecto PROY ON PROY.IdProyecto = HISTORIAL.IdProyecto ");
         sql.append(" LEFT JOIN DepartamentoArea DEP ON DEP.IdDepartamentoArea = HISTORIAL.IdDepartamentoArea ");
         sql.append(" LEFT JOIN UnidadDeNegocio UN ON UN.IdUnidadDeNegocio = HISTORIAL.IdUnidadDeNegocio ");
@@ -281,7 +286,7 @@ public class DashboardJdbcRepository {
 		sql.append("  LEFT JOIN Empleado eda on DEP.IdJefe = eda.IdEmpleado ");
 		sql.append("  LEFT JOIN Empleado eun on UN.IdJefe = eun.IdEmpleado ");
         sql.append(" where 1=1 ");
-        sql.append(" AND MONTH(va.FechaCreacion) = MONTH(getdate()) and YEAR(va.FechaCreacion) = YEAR(GETDATE()) ");
+        sql.append(" AND MONTH(va.FechaCreacion) = MONTH(NOW()) and YEAR(va.FechaCreacion) = YEAR(NOW()) ");
         sql.append(params.filter(" AND ( "+
         		" (HISTORIAL.IdProyecto IS NOT NULL AND PROY.IdJefe = :idJefeInmediato)  OR (HISTORIAL.IdProyecto IS  NULL AND HISTORIAL.IdDepartamentoArea IS NOT NULL AND DEP.IdJefe  = :idJefeInmediato)"+
         		" OR (HISTORIAL.IdProyecto IS  NULL AND HISTORIAL.IdDepartamentoArea IS NULL AND HISTORIAL.IdUnidadDeNegocio IS NOT NULL AND UN.IdJefe = :idJefeInmediato) ) ", filterViewModel.getIdEmpleado()));
@@ -314,7 +319,7 @@ public class DashboardJdbcRepository {
         sql.append(" LEFT JOIN TablaGeneral ESTADO ON he.Estado=ESTADO.Codigo and ESTADO.GRUPO='HorasExtra.Estado'");
         sql.append(" LEFT JOIN Empleado EMPLEADO ON he.IdEmpleado = EMPLEADO.IdEmpleado ");
         sql.append(" LEFT JOIN Empleado ATENDIDO ON he.IdAtendidoPor = ATENDIDO.IdEmpleado ");
-        sql.append(" LEFT JOIN HistorialLaboral HISTORIAL ON HISTORIAL.IdEmpleado = he.IdEmpleado AND ((HISTORIAL.FechaInicio < getdate() AND HISTORIAL.FechaFin > getDate()) OR (HISTORIAL.FechaInicio < getdate() AND HISTORIAL.FechaFin IS NULL)) ");
+        sql.append(" LEFT JOIN HistorialLaboral HISTORIAL ON HISTORIAL.IdEmpleado = he.IdEmpleado AND ((HISTORIAL.FechaInicio < NOW() AND HISTORIAL.FechaFin > NOW()) OR (HISTORIAL.FechaInicio < NOW() AND HISTORIAL.FechaFin IS NULL)) ");
         sql.append(" LEFT JOIN Proyecto PROY ON PROY.IdProyecto = HISTORIAL.IdProyecto ");
         sql.append(" LEFT JOIN DepartamentoArea DEP ON DEP.IdDepartamentoArea = HISTORIAL.IdDepartamentoArea ");
         sql.append(" LEFT JOIN UnidadDeNegocio UN ON UN.IdUnidadDeNegocio = HISTORIAL.IdUnidadDeNegocio ");
@@ -323,7 +328,7 @@ public class DashboardJdbcRepository {
 		sql.append("  LEFT JOIN Empleado eun on UN.IdJefe = eun.IdEmpleado ");
         sql.append(" where 1=1 ");
         sql.append(params.filter(" AND (UN.IdJefe = :idJefe OR DEP.IdJefe = :idJefe OR PROY.IdJefe = :idJefe )",filterViewModel.getIdEmpleado()));
-        sql.append(" AND MONTH(he.Fecha) = MONTH(GETDATE()) AND YEAR(he.Fecha) = YEAR(GETDATE()) ");
+        sql.append(" AND MONTH(he.Fecha) = MONTH(NOW()) AND YEAR(he.Fecha) = YEAR(NOW()) ");
         sql.append(" ORDER BY nombreEmpleado");
 
         return sql.toString();
@@ -583,7 +588,7 @@ public class DashboardJdbcRepository {
         sql.append(" LEFT JOIN TablaGeneral MOTIVO ON pe.MOTIVO=MOTIVO.Codigo and MOTIVO.GRUPO='Permiso.Tipo'");
         sql.append(" LEFT JOIN PeriodoEmpleado PERIODO_EMPLEADO ON pe.IdPeriodoEmpleado = PERIODO_EMPLEADO.IdPeriodoEmpleado ");
         sql.append(" LEFT JOIN Empleado EMPLEADO ON PERIODO_EMPLEADO.IdEmpleado = EMPLEADO.IdEmpleado ");
-        sql.append(" LEFT JOIN HistorialLaboral HISTORIAL ON HISTORIAL.IdEmpleado = EMPLEADO.IdEmpleado AND ((HISTORIAL.FechaInicio < getdate() AND HISTORIAL.FechaFin > getDate()) OR (HISTORIAL.FechaInicio < getdate() AND HISTORIAL.FechaFin IS NULL)) ");
+        sql.append(" LEFT JOIN HistorialLaboral HISTORIAL ON HISTORIAL.IdEmpleado = EMPLEADO.IdEmpleado AND ((HISTORIAL.FechaInicio < NOW() AND HISTORIAL.FechaFin > NOW()) OR (HISTORIAL.FechaInicio < NOW() AND HISTORIAL.FechaFin IS NULL)) ");
         sql.append(" LEFT JOIN Proyecto PROY ON PROY.IdProyecto = HISTORIAL.IdProyecto ");
         sql.append(" LEFT JOIN DepartamentoArea DEP ON DEP.IdDepartamentoArea = HISTORIAL.IdDepartamentoArea ");
         sql.append(" LEFT JOIN UnidadDeNegocio UN ON UN.IdUnidadDeNegocio = HISTORIAL.IdUnidadDeNegocio ");
@@ -591,7 +596,7 @@ public class DashboardJdbcRepository {
 		sql.append(" LEFT JOIN Empleado eda on DEP.IdJefe = eda.IdEmpleado ");
 		sql.append(" LEFT JOIN Empleado eun on UN.IdJefe = eun.IdEmpleado ");
         sql.append(" Where 1=1 ");
-        sql.append(" AND MONTH(pe.Fecha) = MONTH(GETDATE()) AND YEAR(pe.Fecha) = YEAR(GETDATE()) ");
+        sql.append(" AND MONTH(pe.Fecha) = MONTH(NOW()) AND YEAR(pe.Fecha) = YEAR(NOW()) ");
         sql.append(params.filter(" AND EMPLEADO.IdEmpleado = :idEmpleado ", busquedaMarcacionDto.getIdEmpleado()));
         sql.append(" ORDER BY nombreEmpleado");
 
@@ -634,7 +639,7 @@ public class DashboardJdbcRepository {
 
         sql.append(" LEFT JOIN Empleado ATENDIDO ON va.IdAtendidoPor = ATENDIDO.IdEmpleado ");
 
-        sql.append(" LEFT JOIN HistorialLaboral HISTORIAL ON HISTORIAL.IdEmpleado = EMPLEADO.IdEmpleado AND ((HISTORIAL.FechaInicio < getdate() AND HISTORIAL.FechaFin > getDate()) OR (HISTORIAL.FechaInicio < getdate() AND HISTORIAL.FechaFin IS NULL)) ");
+        sql.append(" LEFT JOIN HistorialLaboral HISTORIAL ON HISTORIAL.IdEmpleado = EMPLEADO.IdEmpleado AND ((HISTORIAL.FechaInicio < NOW() AND HISTORIAL.FechaFin > NOW()) OR (HISTORIAL.FechaInicio < NOW() AND HISTORIAL.FechaFin IS NULL)) ");
 
         sql.append(" LEFT JOIN Proyecto PROY ON PROY.IdProyecto = HISTORIAL.IdProyecto ");
         sql.append(" LEFT JOIN DepartamentoArea DEP ON DEP.IdDepartamentoArea = HISTORIAL.IdDepartamentoArea ");
@@ -645,7 +650,7 @@ public class DashboardJdbcRepository {
 		sql.append("  LEFT JOIN Empleado eun on UN.IdJefe = eun.IdEmpleado ");
 
         sql.append(" where 1=1 ");
-        sql.append(" AND MONTH(va.FechaCreacion) = MONTH(getdate()) and YEAR(va.FechaCreacion) = YEAR(GETDATE()) ");
+        sql.append(" AND MONTH(va.FechaCreacion) = MONTH(NOW()) and YEAR(va.FechaCreacion) = YEAR(NOW()) ");
         sql.append(params.filter(" AND EMPLEADO.IdEmpleado = :idEmpleado ", marcacionDashboardEmpleadoDto.getIdEmpleado()));
         sql.append(" ORDER BY nombreEmpleado");
         return sql.toString();
@@ -676,12 +681,12 @@ public class DashboardJdbcRepository {
         sql.append(" LEFT JOIN TablaGeneral ESTADO ON he.Estado=ESTADO.Codigo and ESTADO.GRUPO='HorasExtra.Estado'");
         sql.append(" LEFT JOIN Empleado EMPLEADO ON he.IdEmpleado = EMPLEADO.IdEmpleado ");
         sql.append(" LEFT JOIN Empleado ATENDIDO ON he.IdAtendidoPor = ATENDIDO.IdEmpleado ");
-        sql.append(" LEFT JOIN HistorialLaboral HISTORIAL ON HISTORIAL.IdEmpleado = he.IdEmpleado AND ((HISTORIAL.FechaInicio < getdate() AND HISTORIAL.FechaFin > getDate()) OR (HISTORIAL.FechaInicio < getdate() AND HISTORIAL.FechaFin IS NULL)) ");
+        sql.append(" LEFT JOIN HistorialLaboral HISTORIAL ON HISTORIAL.IdEmpleado = he.IdEmpleado AND ((HISTORIAL.FechaInicio < NOW() AND HISTORIAL.FechaFin > NOW()) OR (HISTORIAL.FechaInicio < NOW() AND HISTORIAL.FechaFin IS NULL)) ");
         sql.append(" LEFT JOIN Proyecto PROY ON PROY.IdProyecto = HISTORIAL.IdProyecto ");
         sql.append(" LEFT JOIN DepartamentoArea DEP ON DEP.IdDepartamentoArea = HISTORIAL.IdDepartamentoArea ");
         sql.append(" LEFT JOIN UnidadDeNegocio UN ON UN.IdUnidadDeNegocio = HISTORIAL.IdUnidadDeNegocio ");
         sql.append(" where 1=1 ");
-        sql.append(" AND MONTH(he.Fecha) = MONTH(GETDATE()) AND YEAR(he.Fecha) = YEAR(GETDATE()) ");
+        sql.append(" AND MONTH(he.Fecha) = MONTH(NOW()) AND YEAR(he.Fecha) = YEAR(NOW()) ");
         sql.append(params.filter(" AND EMPLEADO.IdEmpleado = :idEmpleado ", marcacionDashboardEmpleadoDto.getIdEmpleado()));
         sql.append(" ORDER BY nombreEmpleado");
         return sql.toString();
@@ -827,12 +832,12 @@ public class DashboardJdbcRepository {
         sql.append(" LEFT JOIN TablaGeneral MOTIVO ON pe.MOTIVO=MOTIVO.Codigo and MOTIVO.GRUPO='Permiso.Tipo'");
         sql.append(" LEFT JOIN PeriodoEmpleado PERIODO_EMPLEADO ON pe.IdPeriodoEmpleado = PERIODO_EMPLEADO.IdPeriodoEmpleado ");
         sql.append(" LEFT JOIN Empleado EMPLEADO ON PERIODO_EMPLEADO.IdEmpleado = EMPLEADO.IdEmpleado ");
-        sql.append(" LEFT JOIN HistorialLaboral HISTORIAL ON HISTORIAL.IdEmpleado = EMPLEADO.IdEmpleado AND ((HISTORIAL.FechaInicio < getdate() AND HISTORIAL.FechaFin > getDate()) OR (HISTORIAL.FechaInicio < getdate() AND HISTORIAL.FechaFin IS NULL)) ");
+        sql.append(" LEFT JOIN HistorialLaboral HISTORIAL ON HISTORIAL.IdEmpleado = EMPLEADO.IdEmpleado AND ((HISTORIAL.FechaInicio < NOW() AND HISTORIAL.FechaFin > NOW()) OR (HISTORIAL.FechaInicio < NOW() AND HISTORIAL.FechaFin IS NULL)) ");
         sql.append(" LEFT JOIN Proyecto PROY ON PROY.IdProyecto = HISTORIAL.IdProyecto ");
         sql.append(" LEFT JOIN DepartamentoArea DEP ON DEP.IdDepartamentoArea = HISTORIAL.IdDepartamentoArea ");
         sql.append(" LEFT JOIN UnidadDeNegocio UN ON UN.IdUnidadDeNegocio = HISTORIAL.IdUnidadDeNegocio ");
         sql.append(" Where 1=1 ");
-        sql.append(" AND MONTH(pe.Fecha) = MONTH(GETDATE()) AND YEAR(pe.Fecha) = YEAR(GETDATE()) ");
+        sql.append(" AND MONTH(pe.Fecha) = MONTH(NOW()) AND YEAR(pe.Fecha) = YEAR(NOW()) ");
         sql.append(" ORDER BY nombreEmpleado");
         return sql.toString();
 	}
@@ -853,17 +858,17 @@ public class DashboardJdbcRepository {
 		  sql.append(" Select ");
 		  sql.append(" distinct nroEmpleadosMarcacionFueraTiempo = (select count(prr.Tardanza) FROM Marcacion prr LEFT JOIN Empleado EMP ON EMP.IdEmpleado = prr.IdEmpleado ");
 		  sql.append(" where prr.Tardanza = 1 AND prr.HoraIngreso is NOT NULL ");
-		  sql.append(" AND MONTH(prr.Fecha) = MONTH(GETDATE()) AND YEAR(prr.Fecha) = YEAR(GETDATE()) ");
+		  sql.append(" AND MONTH(prr.Fecha) = MONTH(NOW()) AND YEAR(prr.Fecha) = YEAR(NOW()) ");
 	      sql.append(params.filter(" AND EMP.IdEmpleado = :idEmpleado ", busquedaMarcacionDto.getIdEmpleado()));
 
 	      sql.append(" ),nroEmpleadosMarcacionTiempo = (select count(prr.Tardanza) FROM Marcacion prr LEFT JOIN Empleado EMP ON EMP.IdEmpleado = prr.IdEmpleado ");
 	      sql.append(" where prr.Tardanza = 0 AND prr.HoraIngreso is NOT NULL ");
-	      sql.append(" AND prr.Fecha = GETDATE() ");
+	      sql.append(" AND prr.Fecha = NOW() ");
 	      sql.append(params.filter(" AND EMP.IdEmpleado = :idEmpleado ", busquedaMarcacionDto.getIdEmpleado()));
 
 	      sql.append(" ),nroEmpleadosSinMarcacion = (select count(prr.Inasistencia) FROM Marcacion prr LEFT JOIN Empleado EMP ON EMP.IdEmpleado = prr.IdEmpleado ");
 	      sql.append(" where prr.HoraIngreso IS NULL AND (prr.Inasistencia = 1 OR prr.Vacaciones = 1 OR prr.Licencia = 1) ");
-	      sql.append(" AND MONTH(prr.Fecha) = MONTH(GETDATE()) AND YEAR(prr.Fecha) = YEAR(GETDATE()) ");
+	      sql.append(" AND MONTH(prr.Fecha) = MONTH(NOW()) AND YEAR(prr.Fecha) = YEAR(NOW()) ");
 	      sql.append(params.filter(" AND EMP.IdEmpleado = :idEmpleado ", busquedaMarcacionDto.getIdEmpleado()));
 
 	      sql.append(" ),countIsVacacion = (SELECT count(prr.Vacaciones) FROM Marcacion prr LEFT JOIN Empleado EMP ON EMP.IdEmpleado = prr.IdEmpleado ");
@@ -935,17 +940,19 @@ public class DashboardJdbcRepository {
         sql.append(" select pe.DemoraEntrada as minutosTardanzaXmes");
         sql.append(" From Marcacion pe ") ;
         sql.append(" Where 1=1 ");
-        sql.append(" AND MONTH(pe.Fecha) = MONTH(GETDATE()) AND YEAR(pe.Fecha) = YEAR(GETDATE()) ");
+        sql.append(" AND MONTH(pe.Fecha) = MONTH(NOW()) AND YEAR(pe.Fecha) = YEAR(NOW()) ");
         sql.append(params.filter(" AND pe.IdEmpleado = :idEmpleado ", busquedaMarcacionDto.getIdEmpleado()));
         return sql.toString();
 	}
 
 	public List<IndicadorRRHHResultViewModel> buscarIndicadorRRHHDashBoard(MarcacionDashboardEmpleadoFilterViewModel busquedaMarcacionDto) {
-		WhereParams params = new WhereParams();
-        String sql = buscarIndicadorRRHHDashBoardQuery(busquedaMarcacionDto, params);
+		//TODO Revisar luego este query
+	    //WhereParams params = new WhereParams();
+        //String sql = buscarIndicadorRRHHDashBoardQuery(busquedaMarcacionDto, params);
 
-        return jdbcTemplate.query(sql,
-                params.getParams(), new BeanPropertyRowMapper<>(IndicadorRRHHResultViewModel.class));
+        //return jdbcTemplate.query(sql,
+        //        params.getParams(), new BeanPropertyRowMapper<>(IndicadorRRHHResultViewModel.class));
+        return new ArrayList<>();
 	}
 
 	private String buscarIndicadorRRHHDashBoardQuery(MarcacionDashboardEmpleadoFilterViewModel busquedaMarcacionDto,
@@ -962,15 +969,15 @@ public class DashboardJdbcRepository {
 		  //MODIFICAR ESTO
 	      sql.append(" ),countTardanzasPromedioAlDiaxMes = (select count(prr.Tardanza) FROM Marcacion prr LEFT JOIN Empleado EMP ON EMP.IdEmpleado = prr.IdEmpleado ");
 	      sql.append(" where prr.Tardanza = 1 AND prr.HoraIngreso is NOT NULL ");
-	      sql.append(" AND MONTH(prr.Fecha) = MONTH(GETDATE()) AND YEAR(prr.Fecha) = YEAR(GETDATE()) ");
+	      sql.append(" AND MONTH(prr.Fecha) = MONTH(NOW()) AND YEAR(prr.Fecha) = YEAR(NOW()) ");
 
-	      sql.append(" ),countBirthdayByMonth = (select count(e.IdEmpleado) FROM Empleado e WHERE MONTH(e.FechaNacimiento) = MONTH(getdate()) ");
+	      sql.append(" ),countBirthdayByMonth = (select count(e.IdEmpleado) FROM Empleado e WHERE MONTH(e.FechaNacimiento) = MONTH(NOW()) ");
 
-	      sql.append(" ),countAltasLastYear = (select count(e.IdEmpleado) from Empleado e where 1=1 AND e.Estado = 'A' AND YEAR(e.FechaIngreso) > YEAR(getdate())-2 ");
+	      sql.append(" ),countAltasLastYear = (select count(e.IdEmpleado) from Empleado e where 1=1 AND e.Estado = 'A' AND YEAR(e.FechaIngreso) > YEAR(NOW())-2 ");
 
 	      sql.append(" ),countEmpleadoEmpresa = (select count(e.IdEmpleado) from Empleado e where 1=1 AND e.Estado = 'A' ");
 
-	      sql.append(" ),countContratoxVencer = (select count(e.IdContrato) from Contrato e where MONTH(e.FechaFin) = MONTH(GETDATE()) ");
+	      sql.append(" ),countContratoxVencer = (select count(e.IdContrato) from Contrato e where MONTH(e.FechaFin) = MONTH(NOW()) ");
 
 	      sql.append(" ),countEmpleadoLicenciaByDay = (select count(e.IdLicencia) from Licencia e where 1=1 ");
 	      sql.append(params.filterDate_US_Beteen(" AND ", fechaActual));
@@ -978,13 +985,13 @@ public class DashboardJdbcRepository {
 
 	      sql.append(" ),countInasistenciasxMes = (select count(prr.Inasistencia) FROM Marcacion prr LEFT JOIN Empleado EMP ON EMP.IdEmpleado = prr.IdEmpleado ");
 	      sql.append(" where 1=1 AND prr.HoraIngreso IS NULL AND (prr.Inasistencia = 1) ");
-	      sql.append(" AND MONTH(prr.Fecha) = MONTH(GETDATE()) AND YEAR(prr.Fecha) = YEAR(GETDATE()) ");
+	      sql.append(" AND MONTH(prr.Fecha) = MONTH(NOW()) AND YEAR(prr.Fecha) = YEAR(NOW()) ");
 
 	      sql.append(" ),countLicenciaxMes = (select count(prr.IdMarcacion) from Marcacion prr ");
 	      sql.append(" where 1=1 AND prr.HoraIngreso IS NULL AND (prr.Licencia = 1) ");
-	      sql.append(" AND MONTH(prr.Fecha) = MONTH(GETDATE()) AND YEAR(prr.Fecha) = YEAR(GETDATE()) ");
+	      sql.append(" AND MONTH(prr.Fecha) = MONTH(NOW()) AND YEAR(prr.Fecha) = YEAR(NOW()) ");
 
-	      sql.append(" ),countBajasLastYear = (select count(e.IdEmpleado) from Empleado e where 1=1 AND e.Estado = 'I' AND YEAR(e.FechaCese) > YEAR(getdate())-2 ");
+	      sql.append(" ),countBajasLastYear = (select count(e.IdEmpleado) from Empleado e where 1=1 AND e.Estado = 'I' AND YEAR(e.FechaCese) > YEAR(NOW())-2 ");
 	      sql.append(" ) ");
 
 		return sql.toString();
@@ -1018,12 +1025,12 @@ public class DashboardJdbcRepository {
         sql.append(" LEFT JOIN TablaGeneral ESTADO ON va.Estado=ESTADO.Codigo and ESTADO.GRUPO='Vacaciones.Estado'");
         sql.append(" LEFT JOIN PeriodoEmpleado PERIODO_EMPLEADO ON va.IdPeriodoEmpleado = PERIODO_EMPLEADO.IdPeriodoEmpleado ");
         sql.append(" LEFT JOIN Empleado EMPLEADO ON PERIODO_EMPLEADO.IdEmpleado = EMPLEADO.IdEmpleado ");
-        sql.append(" LEFT JOIN HistorialLaboral HISTORIAL ON HISTORIAL.IdEmpleado = EMPLEADO.IdEmpleado AND ((HISTORIAL.FechaInicio < getdate() AND HISTORIAL.FechaFin > getDate()) OR (HISTORIAL.FechaInicio < getdate() AND HISTORIAL.FechaFin IS NULL)) ");
+        sql.append(" LEFT JOIN HistorialLaboral HISTORIAL ON HISTORIAL.IdEmpleado = EMPLEADO.IdEmpleado AND ((HISTORIAL.FechaInicio < NOW() AND HISTORIAL.FechaFin > NOW()) OR (HISTORIAL.FechaInicio < NOW() AND HISTORIAL.FechaFin IS NULL)) ");
         sql.append(" LEFT JOIN Proyecto PROY ON PROY.IdProyecto = HISTORIAL.IdProyecto ");
         sql.append(" LEFT JOIN DepartamentoArea DEP ON DEP.IdDepartamentoArea = HISTORIAL.IdDepartamentoArea ");
         sql.append(" LEFT JOIN UnidadDeNegocio UN ON UN.IdUnidadDeNegocio = HISTORIAL.IdUnidadDeNegocio ");
         sql.append(" where 1=1 ");
-        sql.append(" AND MONTH(va.FechaCreacion) = MONTH(getdate()) and YEAR(va.FechaCreacion) = YEAR(GETDATE()) ");
+        sql.append(" AND MONTH(va.FechaCreacion) = MONTH(NOW()) and YEAR(va.FechaCreacion) = YEAR(NOW()) ");
         sql.append(" ORDER BY nombreEmpleado");
 
         return sql.toString();
@@ -1053,12 +1060,14 @@ public class DashboardJdbcRepository {
         sql.append(" LEFT JOIN TablaGeneral ESTADO ON he.Estado=ESTADO.Codigo and ESTADO.GRUPO='HorasExtra.Estado'");
         sql.append(" LEFT JOIN Empleado EMPLEADO ON he.IdEmpleado = EMPLEADO.IdEmpleado ");
         sql.append(" LEFT JOIN Empleado ATENDIDO ON he.IdAtendidoPor = ATENDIDO.IdEmpleado ");
-        sql.append(" LEFT JOIN HistorialLaboral HISTORIAL ON HISTORIAL.IdEmpleado = he.IdEmpleado AND ((HISTORIAL.FechaInicio < getdate() AND HISTORIAL.FechaFin > getDate()) OR (HISTORIAL.FechaInicio < getdate() AND HISTORIAL.FechaFin IS NULL)) ");
+        sql.append(" LEFT JOIN HistorialLaboral HISTORIAL ON HISTORIAL.IdEmpleado = he.IdEmpleado AND " +
+                "((HISTORIAL.FechaInicio < NOW() AND HISTORIAL.FechaFin > NOW()) " +
+                "OR (HISTORIAL.FechaInicio < NOW() AND HISTORIAL.FechaFin IS NULL)) ");
         sql.append(" LEFT JOIN Proyecto PROY ON PROY.IdProyecto = HISTORIAL.IdProyecto ");
         sql.append(" LEFT JOIN DepartamentoArea DEP ON DEP.IdDepartamentoArea = HISTORIAL.IdDepartamentoArea ");
         sql.append(" LEFT JOIN UnidadDeNegocio UN ON UN.IdUnidadDeNegocio = HISTORIAL.IdUnidadDeNegocio ");
         sql.append(" where 1=1 ");
-        sql.append(" AND MONTH(he.Fecha) = MONTH(GETDATE()) AND YEAR(he.Fecha) = YEAR(GETDATE()) ");
+        sql.append(" AND MONTH(he.Fecha) = MONTH(NOW()) AND YEAR(he.Fecha) = YEAR(NOW()) ");
         sql.append(" ORDER BY nombreEmpleado");
         return sql.toString();
 	}

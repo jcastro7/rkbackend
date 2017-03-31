@@ -159,7 +159,7 @@ task buildDocker(type: Docker, dependsOn: assemble) {
 }
 
 import org.codehaus.groovy.runtime.*
-import org.eclipse.jgit.api.*
+
 
 def getGitBranchCommit() {
 	try {

@@ -47,7 +47,7 @@ public class RolJdbcRepository {
 		WhereParams params = new WhereParams();
         String sql = searchObtenerAutorizacion(filterViewModel, params);
 
-        return jdbcTemplate.query(sql.toString(),
+        return jdbcTemplate.query(sql,
                 params.getParams(), new BeanPropertyRowMapper<>(Authorization.class));
 	}
 
@@ -79,8 +79,8 @@ public class RolJdbcRepository {
 	private String searchObtenerAutorizacion(AutorizacionFilterViewModel filterViewModel, WhereParams params) {
 		StringBuilder sql = new StringBuilder();
 		sql.append("  SELECT A.Nombre as actionName, ");
-//		sql.append("  Max(convert( INT,P.Autorizado)) AS authorized ");
-		sql.append("  convert( INT,P.Autorizado) AS authorized");
+
+		sql.append("  convert( P.Autorizado, SIGNED) AS authorized");
 		sql.append(" FROM Modulo M  ");
 		sql.append("  LEFT JOIN Accion A ON A.IdModulo = M.IdModulo ");
 		sql.append("  LEFT JOIN Autorizacion P ON P.IdAccion = A.IdAccion ");

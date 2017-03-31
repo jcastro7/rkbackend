@@ -59,7 +59,7 @@ public class PeriodoEmpleadoJdbcRepository implements PeriodoEmpleadoRepository{
 		sql.append("  pe.Periodo AS periodo ");
 		sql.append("  FROM ");
 		sql.append("  PeriodoEmpleado pe ");
-		sql.append("  WHERE (pe.FechaInicio<= getdate() AND pe.FechaFin>= getdate()) ");
+		sql.append("  WHERE (pe.FechaInicio<= now() AND pe.FechaFin>= now()) ");
 		sql.append("  AND pe.IdEmpleado="+empleado.getIdEmpleado());
 				
 		return sql.toString();
@@ -88,13 +88,13 @@ public class PeriodoEmpleadoJdbcRepository implements PeriodoEmpleadoRepository{
 		sql.append("  PE.PermisosDisponibles AS permisosDisponibles ");
 		sql.append("  FROM PeriodoEmpleado PE");
 		sql.append(" LEFT JOIN Empleado EMPLEADO ON PE.IdEmpleado = EMPLEADO.IdEmpleado ");
-		sql.append(" LEFT JOIN HistorialLaboral HISTORIAL ON HISTORIAL.IdEmpleado = EMPLEADO.IdEmpleado AND ((HISTORIAL.FechaInicio < getdate() AND HISTORIAL.FechaFin > getDate()) OR (HISTORIAL.FechaInicio < getdate() AND HISTORIAL.FechaFin IS NULL)) ");
+		sql.append(" LEFT JOIN HistorialLaboral HISTORIAL ON HISTORIAL.IdEmpleado = EMPLEADO.IdEmpleado AND ((HISTORIAL.FechaInicio < now() AND HISTORIAL.FechaFin > now()) OR (HISTORIAL.FechaInicio < now() AND HISTORIAL.FechaFin IS NULL)) ");
 		sql.append(" LEFT JOIN Proyecto PROY ON PROY.IdProyecto = HISTORIAL.IdProyecto ");
         sql.append(" LEFT JOIN DepartamentoArea DEP ON DEP.IdDepartamentoArea = HISTORIAL.IdDepartamentoArea ");
         sql.append(" LEFT JOIN UnidadDeNegocio UN ON UN.IdUnidadDeNegocio = HISTORIAL.IdUnidadDeNegocio ");
 		sql.append(" WHERE 1 = 1");
 		if(busquedaPeriodoEmpleadoDto.isVigente() == true){
-			sql.append("  AND PE.FechaInicio <= getdate() and PE.FechaFin >= getdate() ");
+			sql.append("  AND PE.FechaInicio <= now() and PE.FechaFin >= now() ");
 		}
 	    sql.append(params.filter(" AND UN.IdUnidadDeNegocio = :unidadNegocio ", busquedaPeriodoEmpleadoDto.getUnidadNegocio()));
 	    sql.append(params.filter(" AND DEP.IdDepartamentoArea = :departamento ", busquedaPeriodoEmpleadoDto.getDepartamento()));

@@ -73,8 +73,8 @@ public class LicenciaEmpleadoJdbcRepository implements LicenciaEmpleadoRepositor
         sql.append(" from Licencia li");
         sql.append(" LEFT JOIN TipoLicencia tl ON li.idTipoLicencia=tl.idTipoLicencia ");
         sql.append(" LEFT JOIN Empleado e ON e.idEmpleado=li.idEmpleado ");
-        sql.append(" LEFT JOIN HistorialLaboral HISTORIAL ON HISTORIAL.IdEmpleado = e.IdEmpleado  AND ((HISTORIAL.FechaInicio<=getdate() AND HISTORIAL.FechaFin>=getdate()) AND (HISTORIAL.FechaInicio<=getdate() AND HISTORIAL.FechaFin IS NULL)) ");
-        sql.append(" LEFT JOIN PeriodoEmpleado periodo ON periodo.IdEmpleado = e.IdEmpleado  AND (periodo.FechaInicio<=getdate() AND periodo.FechaFin>=getdate()) ");
+        sql.append(" LEFT JOIN HistorialLaboral HISTORIAL ON HISTORIAL.IdEmpleado = e.IdEmpleado  AND ((HISTORIAL.FechaInicio<=now() AND HISTORIAL.FechaFin>=now()) AND (HISTORIAL.FechaInicio<=now() AND HISTORIAL.FechaFin IS NULL)) ");
+        sql.append(" LEFT JOIN PeriodoEmpleado periodo ON periodo.IdEmpleado = e.IdEmpleado  AND (periodo.FechaInicio<=now() AND periodo.FechaFin>=now()) ");
         sql.append(" LEFT JOIN Proyecto PROY ON PROY.IdProyecto = HISTORIAL.IdProyecto ");
         sql.append(" LEFT JOIN DepartamentoArea DEP ON DEP.IdDepartamentoArea = PROY.IdDepartamentoArea ");
         sql.append(" LEFT JOIN UnidadDeNegocio UN ON UN.IdUnidadDeNegocio = DEP.IdUnidadDeNegocio ");
@@ -143,8 +143,8 @@ public class LicenciaEmpleadoJdbcRepository implements LicenciaEmpleadoRepositor
         sql.append(" from Licencia li");
         sql.append(" LEFT JOIN TipoLicencia tl ON li.idTipoLicencia=tl.idTipoLicencia ");
         sql.append(" LEFT JOIN Empleado e ON e.idEmpleado=li.idEmpleado ");
-        sql.append(" LEFT JOIN HistorialLaboral HISTORIAL ON HISTORIAL.IdEmpleado = e.IdEmpleado  AND ((HISTORIAL.FechaInicio<=getdate() AND HISTORIAL.FechaFin>=getdate()) OR (HISTORIAL.FechaInicio<=getdate() AND HISTORIAL.FechaFin IS NULL)) ");
-        sql.append(" LEFT JOIN PeriodoEmpleado periodo ON periodo.IdEmpleado = e.IdEmpleado  AND (periodo.FechaInicio<=getdate() AND periodo.FechaFin>=getdate()) ");
+        sql.append(" LEFT JOIN HistorialLaboral HISTORIAL ON HISTORIAL.IdEmpleado = e.IdEmpleado  AND ((HISTORIAL.FechaInicio<=now() AND HISTORIAL.FechaFin>=now()) OR (HISTORIAL.FechaInicio<=now() AND HISTORIAL.FechaFin IS NULL)) ");
+        sql.append(" LEFT JOIN PeriodoEmpleado periodo ON periodo.IdEmpleado = e.IdEmpleado  AND (periodo.FechaInicio<=now() AND periodo.FechaFin>=now()) ");
         sql.append(" LEFT JOIN Proyecto PROY ON PROY.IdProyecto = HISTORIAL.IdProyecto ");
         sql.append(" LEFT JOIN DepartamentoArea DEP ON DEP.IdDepartamentoArea = PROY.IdDepartamentoArea ");
         sql.append(" LEFT JOIN UnidadDeNegocio UN ON UN.IdUnidadDeNegocio = DEP.IdUnidadDeNegocio ");

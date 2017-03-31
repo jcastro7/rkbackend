@@ -42,7 +42,7 @@ public class UsuarioResetJdbcRepository implements UsuarioResetRepository{
         sql.append(" u.FechaCreacion as fechaCreacion, ");
         sql.append(" u.Actualizador as actualizador, ");
         sql.append(" u.FechaActualizacion as fechaActualizacion ");
-        sql.append("from UsuarioReset u where u.Enlace = :link and u.Estado= 'A' and (u.FechaInicio<=getdate() and u.FechaFin>=getdate())");
+        sql.append("from UsuarioReset u where u.Enlace = :link and u.Estado= 'A' and (u.FechaInicio<=now() and u.FechaFin>=now())");
         
 
         List<UsuarioResetViewModel > searchResults = jdbcTemplate.query(sql.toString(),

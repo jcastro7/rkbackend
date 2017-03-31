@@ -283,7 +283,7 @@ public class EmpleadoJdbcRepository implements EmpleadoRepository {
 
         sql.append(" LEFT JOIN Empleado ATENDIDO ON va.IdAtendidoPor = ATENDIDO.IdEmpleado ");
 
-        sql.append(" LEFT JOIN HistorialLaboral HISTORIAL ON HISTORIAL.IdEmpleado = EMPLEADO.IdEmpleado AND ((HISTORIAL.FechaInicio < getdate() AND HISTORIAL.FechaFin > getDate()) OR (HISTORIAL.FechaInicio < getdate() AND HISTORIAL.FechaFin IS NULL)) ");
+        sql.append(" LEFT JOIN HistorialLaboral HISTORIAL ON HISTORIAL.IdEmpleado = EMPLEADO.IdEmpleado AND ((HISTORIAL.FechaInicio < now() AND HISTORIAL.FechaFin > now()) OR (HISTORIAL.FechaInicio < now() AND HISTORIAL.FechaFin IS NULL)) ");
 
         sql.append(" LEFT JOIN Proyecto PROY ON PROY.IdProyecto = HISTORIAL.IdProyecto ");
         sql.append(" LEFT JOIN DepartamentoArea DEP ON DEP.IdDepartamentoArea = HISTORIAL.IdDepartamentoArea ");
@@ -402,7 +402,7 @@ public class EmpleadoJdbcRepository implements EmpleadoRepository {
         sql.append(" LEFT JOIN TablaGeneral PERM ON PERM.Codigo=PE.Motivo AND PERM.Grupo = 'Permiso.Motivo' ");
         sql.append(" LEFT JOIN TablaGeneral ESTPERM ON ESTPERM.Codigo=PE.Estado AND ESTPERM.Grupo = 'Permiso.Estado' ");
 
-        sql.append(" LEFT JOIN HistorialLaboral h ON h.IdEmpleado = EMP.IdEmpleado AND (h.FechaInicio<=getdate() AND h.FechaFin>=getdate()) ");
+        sql.append(" LEFT JOIN HistorialLaboral h ON h.IdEmpleado = EMP.IdEmpleado AND (h.FechaInicio<=now() AND h.FechaFin>=now()) ");
 
         sql.append("  LEFT JOIN Proyecto p on p.IdProyecto = h.IdProyecto ");
 		sql.append("  LEFT JOIN Empleado ep on p.IdJefe = ep.IdEmpleado ");
@@ -449,7 +449,7 @@ public class EmpleadoJdbcRepository implements EmpleadoRepository {
         sql.append(" LEFT JOIN Empleado EMP ON EMP.IdEmpleado = PERIODO.IdEmpleado ");
         sql.append(" LEFT JOIN TablaGeneral ESTVAC ON ESTVAC.Codigo=VAC.Estado AND ESTVAC.Grupo = 'Vacaciones.Estado' ");
 
-        sql.append(" LEFT JOIN HistorialLaboral h ON h.IdEmpleado = EMP.IdEmpleado AND (h.FechaInicio<=getdate() AND h.FechaFin>=getdate()) ");
+        sql.append(" LEFT JOIN HistorialLaboral h ON h.IdEmpleado = EMP.IdEmpleado AND (h.FechaInicio<=now() AND h.FechaFin>=now()) ");
 
 
         sql.append(" where PERIODO.IdEmpleado = "+periodoEmpleado.getIdEmpleado());
@@ -513,7 +513,7 @@ public class EmpleadoJdbcRepository implements EmpleadoRepository {
         sql.append(" FROM HorarioEmpleado he ");
         sql.append(" LEFT JOIN Horario h ON h.IdHorario = he.IdHorario ");
         sql.append(" LEFT JOIN TablaGeneral TIPOHORARIO ON he.TipoHorario= TIPOHORARIO.Codigo AND TIPOHORARIO.Grupo = 'Horario.TipoHorario' ");
-        sql.append(" where ((he.InicioVigencia<=getDate() and he.FinVigencia is not null and he.FinVigencia>=getDate()) or (he.InicioVigencia<=getDate() and he.FinVigencia is null) ) ");
+        sql.append(" where ((he.InicioVigencia<=now() and he.FinVigencia is not null and he.FinVigencia>=now()) or (he.InicioVigencia<=now() and he.FinVigencia is null) ) ");
         sql.append(" and he.IdEmpleado = "+idEmpleado);
 
 
@@ -535,8 +535,8 @@ public class EmpleadoJdbcRepository implements EmpleadoRepository {
         sql.append(" he.FinVigencia AS finVigencia, ");
         
         sql.append(" CASE ");
-        sql.append(" WHEN getdate() < he.InicioVigencia THEN 'Futuro' ");
-        sql.append(" WHEN he.FinVigencia < getdate() THEN 'Pasado' ");
+        sql.append(" WHEN now() < he.InicioVigencia THEN 'Futuro' ");
+        sql.append(" WHEN he.FinVigencia < now() THEN 'Pasado' ");
         sql.append(" ELSE 'Vigente' ");
         sql.append(" END AS estadoHorario, ");
         
@@ -706,7 +706,7 @@ public class EmpleadoJdbcRepository implements EmpleadoRepository {
         sql.append(" LEFT JOIN TablaGeneral ESTADO ON e.Estado=ESTADO.Codigo and ESTADO.GRUPO='Empleado.Estado'");
         sql.append(" LEFT JOIN CentroCosto CENTRO ON CENTRO.IdCentroCosto = e.IdCentroCosto");
 
-        sql.append(" LEFT JOIN HistorialLaboral HISTORIAL ON HISTORIAL.IdEmpleado = e.IdEmpleado AND (HISTORIAL.FechaInicio < getdate()  AND (HISTORIAL.FechaFin IS NULL OR  HISTORIAL.FechaFin > getDate() )) ");
+        sql.append(" LEFT JOIN HistorialLaboral HISTORIAL ON HISTORIAL.IdEmpleado = e.IdEmpleado AND (HISTORIAL.FechaInicio < now()  AND (HISTORIAL.FechaFin IS NULL OR  HISTORIAL.FechaFin > now() )) ");
 
         sql.append(" LEFT JOIN Proyecto PROY ON PROY.IdProyecto = HISTORIAL.IdProyecto ");
         sql.append(" LEFT JOIN DepartamentoArea DEP ON DEP.IdDepartamentoArea = HISTORIAL.IdDepartamentoArea ");
@@ -803,7 +803,7 @@ public class EmpleadoJdbcRepository implements EmpleadoRepository {
         sql.append(" LEFT JOIN TablaGeneral RELACION ON e.RelacionContactoEmergencia=RELACION.Codigo and RELACION.GRUPO='Empleado.RelacionContacto' ");
 
         sql.append(" LEFT JOIN CentroCosto CENTRO ON CENTRO.IdCentroCosto = e.IdCentroCosto");
-        sql.append(" LEFT JOIN HistorialLaboral HISTORIAL ON HISTORIAL.IdEmpleado = e.IdEmpleado AND ((HISTORIAL.FechaInicio < getdate() AND HISTORIAL.FechaFin > getDate()) OR (HISTORIAL.FechaInicio < getdate() AND HISTORIAL.FechaFin IS NULL)) ");
+        sql.append(" LEFT JOIN HistorialLaboral HISTORIAL ON HISTORIAL.IdEmpleado = e.IdEmpleado AND ((HISTORIAL.FechaInicio < now() AND HISTORIAL.FechaFin > now()) OR (HISTORIAL.FechaInicio < now() AND HISTORIAL.FechaFin IS NULL)) ");
 
         sql.append(" LEFT JOIN Proyecto PROY ON PROY.IdProyecto = HISTORIAL.IdProyecto ");
         sql.append(" LEFT JOIN DepartamentoArea DEP ON DEP.IdDepartamentoArea = HISTORIAL.IdDepartamentoArea ");
@@ -1118,7 +1118,7 @@ public class EmpleadoJdbcRepository implements EmpleadoRepository {
 
         sql.append(" LEFT JOIN Empleado ATENDIDO ON he.IdAtendidoPor = ATENDIDO.IdEmpleado ");
 
-        sql.append(" LEFT JOIN HistorialLaboral HISTORIAL ON HISTORIAL.IdEmpleado = he.IdEmpleado AND ((HISTORIAL.FechaInicio < getdate() AND HISTORIAL.FechaFin > getDate()) AND (HISTORIAL.FechaInicio < getdate() AND HISTORIAL.FechaFin IS NULL)) ");
+        sql.append(" LEFT JOIN HistorialLaboral HISTORIAL ON HISTORIAL.IdEmpleado = he.IdEmpleado AND ((HISTORIAL.FechaInicio < now() AND HISTORIAL.FechaFin > now()) AND (HISTORIAL.FechaInicio < now() AND HISTORIAL.FechaFin IS NULL)) ");
 
         sql.append(" LEFT JOIN Proyecto PROY ON PROY.IdProyecto = HISTORIAL.IdProyecto ");
         sql.append(" LEFT JOIN DepartamentoArea DEP ON DEP.IdDepartamentoArea = HISTORIAL.IdDepartamentoArea ");
@@ -1194,7 +1194,7 @@ public class EmpleadoJdbcRepository implements EmpleadoRepository {
 		sql.append(" FROM HorarioEmpleado he  ");
 		sql.append(" LEFT JOIN HorarioEmpleadoDia hed on hed.IdHorarioEmpleado = he.IdHorarioEmpleado ");
 		sql.append(" WHERE 1 = 1 ");
-		sql.append(" AND (he.InicioVigencia<= getdate() AND he.FinVigencia>= getdate()) ");
+		sql.append(" AND (he.InicioVigencia<= now() AND he.FinVigencia>= now()) ");
 		sql.append(" AND he.IdEmpleado="+idEmpleado);
 		sql.append(" AND hed.DiaSemana='"+dayOfWeekVal+"'");
 		return sql.toString();
@@ -1404,7 +1404,7 @@ public class EmpleadoJdbcRepository implements EmpleadoRepository {
         sql.append(" LEFT JOIN TablaGeneral ESTADO ON e.Estado=ESTADO.Codigo and ESTADO.GRUPO='Empleado.Estado'");
         sql.append(" LEFT JOIN CentroCosto CENTRO ON CENTRO.IdCentroCosto = e.IdCentroCosto");
         
-        sql.append(" LEFT JOIN HistorialLaboral HISTORIAL ON HISTORIAL.IdEmpleado = e.IdEmpleado AND ((HISTORIAL.FechaInicio < getdate() AND HISTORIAL.FechaFin > getDate()) OR (HISTORIAL.FechaInicio < getdate() AND HISTORIAL.FechaFin IS NULL)) ");
+        sql.append(" LEFT JOIN HistorialLaboral HISTORIAL ON HISTORIAL.IdEmpleado = e.IdEmpleado AND ((HISTORIAL.FechaInicio < now() AND HISTORIAL.FechaFin > now()) OR (HISTORIAL.FechaInicio < now() AND HISTORIAL.FechaFin IS NULL)) ");
         
         sql.append(" LEFT JOIN Proyecto PROY ON PROY.IdProyecto = HISTORIAL.IdProyecto ");
         sql.append(" LEFT JOIN DepartamentoArea DEP ON DEP.IdDepartamentoArea = HISTORIAL.IdDepartamentoArea ");

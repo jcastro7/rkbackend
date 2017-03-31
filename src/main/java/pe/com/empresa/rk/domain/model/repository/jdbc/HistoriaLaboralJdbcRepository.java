@@ -201,7 +201,7 @@ public class HistoriaLaboralJdbcRepository implements HistoriaLaboralRepository{
 		sql.append("  LEFT JOIN Empleado eda on da.IdJefe = eda.IdEmpleado ");
 		sql.append("  LEFT JOIN UnidadDeNegocio un ON un.IdUnidadDeNegocio = h.IdUnidadDeNegocio ");
 		sql.append("  LEFT JOIN Empleado eun on un.IdJefe = eun.IdEmpleado ");
-		sql.append("  WHERE ( (h.FechaInicio<=getdate()  AND h.FechaFin IS NULL) OR (h.FechaInicio<= getdate() AND h.FechaFin IS NOT NULL AND h.FechaFin>= getdate()) ) ");
+		sql.append("  WHERE ( (h.FechaInicio<=now()  AND h.FechaFin IS NULL) OR (h.FechaInicio<= now() AND h.FechaFin IS NOT NULL AND h.FechaFin>= now()) ) ");
 		sql.append("  AND h.IdEmpleado="+empleado.getIdEmpleado());
 				
 		
@@ -274,7 +274,7 @@ public class HistoriaLaboralJdbcRepository implements HistoriaLaboralRepository{
 		sql.append("  LEFT JOIN UnidadDeNegocio un ON un.IdUnidadDeNegocio = h.IdUnidadDeNegocio ");
 		sql.append("  LEFT JOIN Empleado eun on un.IdJefe = eun.IdEmpleado ");
 		   
-		sql.append("  WHERE ( (h.FechaInicio<= getdate() AND h.FechaFin IS NULL) OR (h.FechaInicio<= getdate() AND h.FechaFin IS NOT NULL AND h.FechaFin>= getdate()) ) ");
+		sql.append("  WHERE ( (h.FechaInicio<= now() AND h.FechaFin IS NULL) OR (h.FechaInicio<= now() AND h.FechaFin IS NOT NULL AND h.FechaFin>= now()) ) ");
 		sql.append("  AND h.IdEmpleado="+empleado.getIdEmpleado());
 				
 		
@@ -292,7 +292,7 @@ public class HistoriaLaboralJdbcRepository implements HistoriaLaboralRepository{
 		sql.append("  HistorialLaboral h ");
 		sql.append("  LEFT JOIN Empleado ep on ep.IdEmpleado = [dbo].[GetJefeInmediato] (h.IdEmpleado,h.IdHistorialLaboral) ");
 		   
-		sql.append("  WHERE ( (h.FechaInicio<= getdate() AND h.FechaFin IS NULL) OR (h.FechaInicio<= getdate() AND h.FechaFin IS NOT NULL AND h.FechaFin>= getdate()) ) ");
+		sql.append("  WHERE ( (h.FechaInicio<= now() AND h.FechaFin IS NULL) OR (h.FechaInicio<= now() AND h.FechaFin IS NOT NULL AND h.FechaFin>= now()) ) ");
 		sql.append(params.filter("  AND h.IdEmpleado = :idEmpleado ",idEmpleado));
 				
 		
@@ -315,7 +315,7 @@ public class HistoriaLaboralJdbcRepository implements HistoriaLaboralRepository{
 		sql.append("  FROM ");
 		sql.append("  HistorialLaboral h ");
 		
-		sql.append("  WHERE h.FechaInicio<= getdate() AND (h.FechaFin IS NULL OR h.FechaFin>= getdate()) ");
+		sql.append("  WHERE h.FechaInicio<= now() AND (h.FechaFin IS NULL OR h.FechaFin>= now()) ");
 		sql.append("  AND h.IdEmpleado="+idEmpleado);
 				
 		
@@ -435,7 +435,7 @@ public class HistoriaLaboralJdbcRepository implements HistoriaLaboralRepository{
 		sql.append("  LEFT JOIN UnidadDeNegocio un ON un.IdUnidadDeNegocio = h.IdUnidadDeNegocio ");
 		sql.append("  LEFT JOIN Empleado eun on un.IdJefe = eun.IdEmpleado ");
 		   
-		sql.append("  WHERE (h.FechaInicio<= getdate() AND h.FechaFin>= getdate()) ");
+		sql.append("  WHERE (h.FechaInicio<= now() AND h.FechaFin>= now()) ");
 		sql.append("  AND h.IdEmpleado="+licenciaEmpleadoD.getIdEmpleado());
 				
 		

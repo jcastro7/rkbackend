@@ -106,7 +106,8 @@ public class UsuarioJdbcRepository implements UsuarioRepository{
 		sql.append(" u.ApellidoPaterno AS apellidoPaterno, ");
 		sql.append(" u.ApellidoMaterno AS apellidoMaterno, ");
 		sql.append(" u.CuentaUsuario AS cuentaUsuario, ");
-		sql.append(" CASE WHEN (u.Estado='A')  THEN 'Activo' ELSE CASE WHEN (u.Estado='I') THEN 'Inactivo' ELSE CASE WHEN (u.Estado='B') THEN 'Bloqueado' END END END AS estado, ");
+		sql.append(" CASE WHEN (u.Estado='A')  THEN 'Activo' ELSE CASE WHEN (u.Estado='I') THEN 'Inactivo' " +
+                "ELSE CASE WHEN (u.Estado='B') THEN 'Bloqueado' END END END AS estado, ");
 		sql.append(" u.Email AS email ");
 		
 		

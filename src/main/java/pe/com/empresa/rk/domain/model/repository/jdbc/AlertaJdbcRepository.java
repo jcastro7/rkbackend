@@ -1,6 +1,7 @@
 package pe.com.empresa.rk.domain.model.repository.jdbc;
 
 import java.sql.Types;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -112,14 +113,15 @@ public class AlertaJdbcRepository implements AlertaRepository {
 
     @Override
     public List<AlertaEmpleadoViewModel> obtenerAlertaEmpleado(Long idEmpleado) {
-        SimpleJdbcCall jdbcCall = new SimpleJdbcCall(dataSource).withProcedureName("spuAlertasEmpleadosPendientes")
+        //TODO Reemplazar por consultas y no stored procedure
+        /*SimpleJdbcCall jdbcCall = new SimpleJdbcCall(dataSource).withProcedureName("spuAlertasEmpleadosPendientes")
                 .returningResultSet("MensajeAlerta", new BeanPropertyRowMapper<AlertaEmpleadoViewModel>(AlertaEmpleadoViewModel.class));
         SqlParameterSource in = new MapSqlParameterSource().addValue("idEmpleado", idEmpleado, Types.NUMERIC);
 
         Map<String, Object> out = jdbcCall.execute(in);
-        List<AlertaEmpleadoViewModel> lista = (List<AlertaEmpleadoViewModel>) out.get("MensajeAlerta");
+        List<AlertaEmpleadoViewModel> lista = (List<AlertaEmpleadoViewModel>) out.get("MensajeAlerta");*/
 
-        return lista;
+        return new ArrayList<>();
     }
 
 

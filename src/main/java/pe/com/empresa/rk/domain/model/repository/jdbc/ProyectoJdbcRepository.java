@@ -60,7 +60,7 @@ public class ProyectoJdbcRepository implements ProyectoRepository{
         //sql.append(" inner join HistorialLaboral h on ");
         //sql.append(" (h.IdUnidadDeNegocio=u.IdUnidadDeNegocio and h.IdDepartamentoArea=d.IdDepartamentoArea "); 
         //sql.append(" and h.IdProyecto=pr.IdProyecto and ( ");
-        //sql.append(" (GETDATE()>=h.FechaInicio and GETDATE()<=h.FechaFin) or (GETDATE()>=h.FechaInicio and h.FechaFin is null)) ");
+        //sql.append(" (now()>=h.FechaInicio and now()<=h.FechaFin) or (now()>=h.FechaInicio and h.FechaFin is null)) ");
         //sql.append(" ))");
         
         
@@ -104,7 +104,7 @@ public class ProyectoJdbcRepository implements ProyectoRepository{
         sql.append(" inner join HistorialLaboral h on ");
         sql.append(" (h.IdUnidadDeNegocio=u.IdUnidadDeNegocio and h.IdDepartamentoArea=d.IdDepartamentoArea "); 
         sql.append(" and h.IdProyecto=pr.IdProyecto and ( ");
-        sql.append(" (GETDATE()>=h.FechaInicio and GETDATE()<=h.FechaFin) or (GETDATE()>=h.FechaInicio and h.FechaFin is null)) ");
+        sql.append(" (now()>=h.FechaInicio and now()<=h.FechaFin) or (now()>=h.FechaInicio and h.FechaFin is null)) ");
         sql.append(" ))");
         sql.append(" FROM Proyecto P ");
         sql.append(" LEFT JOIN DepartamentoArea DEP ON DEP.IdDepartamentoArea = P.IdDepartamentoArea ");

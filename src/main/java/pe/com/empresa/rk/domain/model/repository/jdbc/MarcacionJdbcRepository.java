@@ -241,7 +241,7 @@ public class MarcacionJdbcRepository implements MarcacionRepository {
         
         sql.append(" FROM EmpleadoCompensacion EC ");  
         sql.append(" LEFT JOIN Empleado EMP ON EMP.IdEmpleado = EC.IdEmpleado ");  
-        sql.append(" LEFT JOIN HistorialLaboral HISTORIAL ON HISTORIAL.IdEmpleado = EMP.IdEmpleado  AND ((HISTORIAL.FechaInicio<=getdate() AND HISTORIAL.FechaFin>=getdate()) OR (HISTORIAL.FechaInicio<=getdate() AND HISTORIAL.FechaFin IS NULL)) ");
+        sql.append(" LEFT JOIN HistorialLaboral HISTORIAL ON HISTORIAL.IdEmpleado = EMP.IdEmpleado  AND ((HISTORIAL.FechaInicio<=now() AND HISTORIAL.FechaFin>=now()) OR (HISTORIAL.FechaInicio<=now() AND HISTORIAL.FechaFin IS NULL)) ");
         
         sql.append(" LEFT JOIN Proyecto PROY ON PROY.IdProyecto = HISTORIAL.IdProyecto ");
         
@@ -304,7 +304,7 @@ public class MarcacionJdbcRepository implements MarcacionRepository {
         
         sql.append(" FROM Marcacion MAR ");  
         sql.append(" LEFT JOIN Empleado EMP ON EMP.IdEmpleado = MAR.IdEmpleado ");  
-        sql.append(" LEFT JOIN HistorialLaboral HISTORIAL ON HISTORIAL.IdEmpleado = EMP.IdEmpleado  AND ((HISTORIAL.FechaInicio<=getdate() AND HISTORIAL.FechaFin>=getdate()) OR (HISTORIAL.FechaInicio<=getdate() AND HISTORIAL.FechaFin IS NULL)) ");
+        sql.append(" LEFT JOIN HistorialLaboral HISTORIAL ON HISTORIAL.IdEmpleado = EMP.IdEmpleado  AND ((HISTORIAL.FechaInicio<=now() AND HISTORIAL.FechaFin>=now()) OR (HISTORIAL.FechaInicio<=now() AND HISTORIAL.FechaFin IS NULL)) ");
         
         sql.append(" LEFT JOIN Proyecto PROY ON PROY.IdProyecto = HISTORIAL.IdProyecto ");
         
@@ -427,7 +427,7 @@ public class MarcacionJdbcRepository implements MarcacionRepository {
         WhereParams params = new WhereParams();
         String query = "select count(*) from RegistroMarcacionEmpleado \n" +
                 "where CONVERT(CHAR(5), FechaCreacion, " + codigo + ") between '00:00' and '09:30' " +
-                "and FechaCreacion >= DATEADD(day, -1, GETDATE()) and Sensor=103";
+                "and FechaCreacion >= DATEADD(day, -1, now()) and Sensor=103";
         return jdbcTemplate.queryForObject(query, params.getParams(), Integer.class);
     }
 
