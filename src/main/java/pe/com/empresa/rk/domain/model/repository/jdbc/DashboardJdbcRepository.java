@@ -1,6 +1,5 @@
 package pe.com.empresa.rk.domain.model.repository.jdbc;
 
-import com.sun.org.apache.bcel.internal.generic.ARRAYLENGTH;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
