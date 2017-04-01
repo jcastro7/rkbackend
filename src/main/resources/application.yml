@@ -1,0 +1,109 @@
+server:
+  port: ${vcap.application.port:7999}
+
+---
+
+frontend:
+  server: localhost
+  port: 4200
+
+spring:
+  profiles: default
+
+  security.ldap:
+    active: false
+    url: ldap://127.0.0.1:389
+    authentication: simple
+    baseDN: OU=Empresa,DC=empresa,DC=com,DC=pe
+    admin: admin@empresa.com.pe
+    password: adminpassword
+
+  production:
+    active: false
+
+  security.jwt:
+    tokenExpirationTime: 120 # Number of minutes
+    refreshTokenExpTime: 180 # Minutes
+    tokenIssuer: http://www.joedayz.pe
+    tokenSigningKey: xm8EV6Hy5RMFK4EEACIDAwQus
+
+  urlpasswordreset:
+    ipfrontend: http://localhost:4200/reset/validatePassword
+
+  mail:
+    sender: admin@empresa.com.pe
+    fromIP: 192.168.1.45
+    host: 192.168.0.10
+    username: admin@empresa.com.pe
+    password: admin2017
+    port: 587
+    properties:
+      mail:
+        smtp:
+          auth: false
+          starttls.enable: false
+
+  dataSource:
+    driverClassName: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost/runakuna_dev
+    username: root
+    password: joedayz
+    testOnBorrow: true
+    removeAbandonedTimeout: 1800
+    removeAbandoned: true
+    validationQuery: select 1
+    #validationQuery:  select sysdate from dual
+    logAbandoned: true
+    minEvictableIdleTimeMillis: 60000
+    defaultReadOnly: false
+    maxWait: 60000
+    maxIdle: 1
+    minIdle: 0
+    maxActive: 50
+    initialSize: 1
+    test-on-connect: true
+
+  marcacionDataSource:
+    driverClassName: net.sourceforge.jtds.jdbc.Driver
+    url: jdbc:jtds:sqlserver://192.168.0.27/tssAttendance
+    username: tssuser
+    password: tssuser
+    testOnBorrow: true
+    removeAbandonedTimeout: 1800
+    removeAbandoned: true
+    validationQuery: select 1
+    #validationQuery:  select sysdate from dual
+    logAbandoned: true
+    minEvictableIdleTimeMillis: 60000
+    defaultReadOnly: false
+    maxWait: 60000
+    maxIdle: 1
+    minIdle: 0
+    maxActive: 50
+    initialSize: 1
+    test-on-connect: true
+
+  jpa:
+    #database-platform: org.hibernate.dialect.Oracle10gDialect
+    #database-platform: org.hibernate.dialect.Oracle12cDialect
+    show-sql: true
+    #generate-ddl= true.hibernate.ejb.interceptor=MyInterceptorClassName
+
+    hibernate:
+      ddl-auto: none
+      naming-strategy: org.hibernate.cfg.DefaultNamingStrategy
+
+
+
+    properties:
+      hibernate:
+          order_inserts: true
+          order_updates: true
+          ejb:
+            interceptor: pe.com.empresa.rk.jpa.RunaKunaEntityInterceptorImpl
+          jdbc:
+            batch_size: 400
+            batch_versioned_data: true
+
+multipart.maxFileSize: 20MB
+multipart.maxRequestSize: 20MB
