@@ -48,6 +48,10 @@ spring:
     url: jdbc:mysql://localhost/runakuna_dev
     username: root
     password: joedayz
+    #driverClassName: com.microsoft.sqlserver.jdbc.SQLServerDriver
+    #url: jdbc:sqlserver://192.168.0.155;databaseName=RunaKuna_DEV
+    #username: user
+    #password: password    
     testOnBorrow: true
     removeAbandonedTimeout: 1800
     removeAbandoned: true
@@ -64,10 +68,10 @@ spring:
     test-on-connect: true
 
   marcacionDataSource:
-    driverClassName: net.sourceforge.jtds.jdbc.Driver
+    driverClassName: net.sourceforge.jtds.jdbc.Driver  #sql server 2008
     url: jdbc:jtds:sqlserver://192.168.0.27/tssAttendance
-    username: tssuser
-    password: tssuser
+    username: user
+    password: password
     testOnBorrow: true
     removeAbandonedTimeout: 1800
     removeAbandoned: true
