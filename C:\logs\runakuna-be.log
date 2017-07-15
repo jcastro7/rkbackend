@@ -8126,3 +8126,18 @@ org.springframework.dao.InvalidDataAccessApiUsageException: No value supplied fo
 05:30:49.023 [INFO ] [          http-nio-7999-exec-1] [             UsuarioController:88 ] - Msg obtenerUsuarios: [pe.com.empresa.rk.view.model.UsuarioResultViewModel@3ec37699, pe.com.empresa.rk.view.model.UsuarioResultViewModel@305f6282, pe.com.empresa.rk.view.model.UsuarioResultViewModel@17040373, pe.com.empresa.rk.view.model.UsuarioResultViewModel@30f68083, pe.com.empresa.rk.view.model.UsuarioResultViewModel@15a45fba]
 05:30:49.072 [DEBUG] [          http-nio-7999-exec-1] [    ExceptionTranslationFilter:116] - Chain processed normally
 05:30:49.073 [DEBUG] [          http-nio-7999-exec-1] [curityContextPersistenceFilter:105] - SecurityContextHolder now cleared, as request processing completed
+09:33:09.972 [INFO ] [I TCP Connection(18)-127.0.0.1] [gistrar$SpringApplicationAdmin:122] - Application shutdown requested.
+09:33:09.978 [INFO ] [I TCP Connection(18)-127.0.0.1] [gEmbeddedWebApplicationContext:982] - Closing org.springframework.boot.context.embedded.AnnotationConfigEmbeddedWebApplicationContext@bc57b40: startup date [Sat Jul 15 05:30:24 PET 2017]; parent: org.springframework.context.annotation.AnnotationConfigApplicationContext@15ca7889
+09:33:10.002 [INFO ] [I TCP Connection(18)-127.0.0.1] [       AnnotationMBeanExporter:449] - Unregistering JMX-exposed beans on shutdown
+09:33:10.003 [INFO ] [I TCP Connection(18)-127.0.0.1] [       AnnotationMBeanExporter:241] - Unregistering JMX-exposed beans
+09:33:10.035 [INFO ] [I TCP Connection(18)-127.0.0.1] [tainerEntityManagerFactoryBean:551] - Closing JPA EntityManagerFactory for persistence unit 'default'
+09:33:10.056 [INFO ] [I TCP Connection(18)-127.0.0.1] [             Http11NioProtocol:180] - Pausing ProtocolHandler ["http-nio-7999"]
+09:33:10.061 [INFO ] [I TCP Connection(18)-127.0.0.1] [               StandardService:180] - Stopping service Tomcat
+09:33:10.073 [INFO ] [         localhost-startStop-2] [                           [/]:180] - Destroying Spring FrameworkServlet 'dispatcherServlet'
+09:33:10.084 [WARN ] [         localhost-startStop-2] [         WebappClassLoaderBase:180] - The web application [ROOT] appears to have started a thread named [Abandoned connection cleanup thread] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ java.lang.Object.wait(Native Method)
+ java.lang.ref.ReferenceQueue.remove(ReferenceQueue.java:143)
+ com.mysql.jdbc.AbandonedConnectionCleanupThread.run(AbandonedConnectionCleanupThread.java:43)
+09:33:10.093 [INFO ] [I TCP Connection(18)-127.0.0.1] [             Http11NioProtocol:180] - Stopping ProtocolHandler ["http-nio-7999"]
+09:33:10.106 [INFO ] [I TCP Connection(18)-127.0.0.1] [             Http11NioProtocol:180] - Destroying ProtocolHandler ["http-nio-7999"]
+09:33:10.109 [INFO ] [                      Thread-2] [tationConfigApplicationContext:982] - Closing org.springframework.context.annotation.AnnotationConfigApplicationContext@15ca7889: startup date [Sat Jul 15 05:30:07 PET 2017]; root of context hierarchy
