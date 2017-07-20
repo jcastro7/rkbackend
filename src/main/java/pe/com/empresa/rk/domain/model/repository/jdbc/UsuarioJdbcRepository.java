@@ -117,7 +117,7 @@ public class UsuarioJdbcRepository implements UsuarioRepository{
         sql.append(" WHERE 1=1 ");
         sql.append(params.filter(" AND u.CuentaUsuario = :cuentaUsuario ",filterViewModel.getCuentaUsuario()));
         sql.append(params.filter(" AND u.Email = :email ",filterViewModel.getEmail()));
-        //sql.append(params.filter(" AND UPPER(u.Nombre) LIKE  UPPER ('%'+ :nombre +'%') ",filterViewModel.getNombre()));
+        //SQL SERVER ==> sql.append(params.filter(" AND UPPER(u.Nombre) LIKE  UPPER ('%'+ :nombre +'%') ",filterViewModel.getNombre())); 
         sql.append(params.filter(" AND UPPER(u.Nombre) LIKE UPPER(CONCAT('%', :nombre, '%'))",filterViewModel.getNombre()));
         //sql.append(params.filter(" AND UPPER(u.ApellidoPaterno) LIKE  UPPER ('%'+ :apellidoPaterno +'%') ",filterViewModel.getApellidoPaterno()));
         sql.append(params.filter(" AND UPPER(u.ApellidoPaterno) LIKE UPPER(CONCAT('%', :apellidoPaterno, '%'))",filterViewModel.getApellidoPaterno()));
