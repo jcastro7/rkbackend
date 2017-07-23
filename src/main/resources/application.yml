@@ -33,10 +33,10 @@ spring:
   
   security.ldap:
     active: false
-    url: ldap://192.168.0.4:389
+    url: ldap://ip-ldap
     authentication: simple
-    baseDN: OU=Transolutions,DC=tss,DC=com,DC=pe
-    admin: gitlab@tss.com.pe
+    baseDN: OU=empresa,DC=acme,DC=com,DC=pe
+    admin: user@acme.com.pe
     password: password
   
 
@@ -53,11 +53,11 @@ spring:
     ipfrontend: http://localhost:4200/reset/validatePassword
   
   mail:
-    sender: RunakunaSVCAccount@tss.com.pe
+    sender: mail@tss.com.pe
     fromIP: 192.168.1.45
     host: 192.168.0.10
-    username: RunakunaSVCAccount@tss.com.pe
-    password: H4ZG9:iQ
+    username: mail@tss.com.pe
+    password: password
     port: 587
     properties:
       mail:
@@ -89,7 +89,7 @@ spring:
     driverClassName: net.sourceforge.jtds.jdbc.Driver
     url: jdbc:jtds:sqlserver://TSSULTRATUGTF/tssAttendance
     username: tssAttendanceForRunakuna
-    password: kuelcwjMrfuMWpvqNZjh
+    password: password
     testOnBorrow: true
     removeAbandonedTimeout: 1800
     removeAbandoned: true
