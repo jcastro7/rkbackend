@@ -1,0 +1,131 @@
+server:
+  port: ${vcap.application.port:7999}
+
+
+---
+
+frontend:
+  server: localhost
+  port: 4200
+
+
+spring:
+  profiles: default
+  
+  cronFrecuency:
+    JOB_VERI_SENS: 0 0/30 8-10 ? * MON-FRI
+    JOB_BAJ_EMPL: 0 0 8 ? * *
+    JOB_INTE_MARCA: 0 0/5 * 1/1 * ?
+    JOB_INTE_COMP: 0 30 23 1/1 * ?
+    JOB_CREAR_MARCA: 0 30 0 1/1 * ?
+    JOB_MARCA_INCO: 0 45 23 1/1 * ?
+    JOB_RECA_MARCA: 0 0/10 * 1/1 * ?
+    JOB_CRE_PERI: 0 50 23 ? * *
+    JOB_ACT_VACA: 0 59 23 ? * *
+    JOB_REP_MARCA: 0 0 7 1/1 * ?
+    JOB_REP_MARCA_ACU: 0 10 7 1/1 * ?
+    JOB_TARDANZA_GROUP: 0 0 11 * * ?
+    JOB_INASISTENCIA: 0 0 11 * * ?
+    JOB_MAX_LIC: 0 0 0 ? * *
+    JOB_VALID_ORDEN_MARC: 0 10 23 1/1 * ?
+    JOB_VENC_CONTR: 0 59 23 ? * *
+    JOB_ANTIGUEDAD_EMPLE: 0 59 23 ? * *
+  
+  security.ldap:
+    active: false
+    url: ldap://192.168.0.4:389
+    authentication: simple
+    baseDN: OU=Transolutions,DC=tss,DC=com,DC=pe
+    admin: gitlab@tss.com.pe
+    password: password
+  
+
+  production:
+    active: false
+    
+  security.jwt:
+    tokenExpirationTime: 240 # Number of minutes
+    refreshTokenExpTime: 1440 # Minutes
+    tokenIssuer: http://www.tss.com.pe
+    tokenSigningKey: xm8EV6Hy5RMFK4EEACIDAwQus  
+  
+  urlpasswordreset:
+    ipfrontend: http://localhost:4200/reset/validatePassword
+  
+  mail:
+    sender: RunakunaSVCAccount@tss.com.pe
+    fromIP: 192.168.1.45
+    host: 192.168.0.10
+    username: RunakunaSVCAccount@tss.com.pe
+    password: H4ZG9:iQ
+    port: 587
+    properties:
+      mail:
+        smtp:
+          auth: false
+          starttls.enable: false
+
+  dataSource:
+    driverClassName: com.microsoft.sqlserver.jdbc.SQLServerDriver
+    url: jdbc:sqlserver://localhost;databaseName=RunaKuna_DEV
+    username: sa
+    password: Joedayz123
+    testOnBorrow: true
+    removeAbandonedTimeout: 1800
+    removeAbandoned: true
+    validationQuery: select 1
+    #validationQuery:  select sysdate from dual
+    logAbandoned: true
+    minEvictableIdleTimeMillis: 60000
+    defaultReadOnly: false
+    maxWait: 60000
+    maxIdle: 1
+    minIdle: 0
+    maxActive: 50
+    initialSize: 1
+    test-on-connect: true
+
+  marcacionDataSource:
+    driverClassName: net.sourceforge.jtds.jdbc.Driver
+    url: jdbc:jtds:sqlserver://TSSULTRATUGTF/tssAttendance
+    username: tssAttendanceForRunakuna
+    password: kuelcwjMrfuMWpvqNZjh
+    testOnBorrow: true
+    removeAbandonedTimeout: 1800
+    removeAbandoned: true
+    validationQuery: select 1
+    #validationQuery:  select sysdate from dual
+    logAbandoned: true
+    minEvictableIdleTimeMillis: 60000
+    defaultReadOnly: false
+    maxWait: 60000
+    maxIdle: 1
+    minIdle: 0
+    maxActive: 50
+    initialSize: 1
+    test-on-connect: true
+
+  jpa:
+    #database-platform: org.hibernate.dialect.Oracle10gDialect
+    #database-platform: org.hibernate.dialect.Oracle12cDialect
+    show-sql: false
+    #generate-ddl= true.hibernate.ejb.interceptor=MyInterceptorClassName
+
+    hibernate:
+      ddl-auto: none
+      naming-strategy: org.hibernate.cfg.DefaultNamingStrategy
+
+
+
+    properties:
+      hibernate:
+          order_inserts: true
+          order_updates: true
+          ejb:
+            interceptor: pe.com.tss.runakuna.jpa.RunaKunaEntityInterceptorImpl
+          jdbc:
+            batch_size: 400
+            batch_versioned_data: true
+            
+multipart.maxFileSize: 20MB
+multipart.maxRequestSize: 20MB 

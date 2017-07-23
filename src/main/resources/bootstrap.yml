@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: runakuna-backend
+
+  #cloud:
+    #config:
+      #uri: ${CONFIG_SERVER:http://user:secret4@localhost:7777}
+#     uri: http://user:secret4@192.168.1.184:7777
+      #failFast: true
+
