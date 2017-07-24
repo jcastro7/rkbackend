@@ -27,6 +27,5 @@ nbdist/
 /bin/
 classes/
 *.zip
-/build.gradle
 
 npm-debug.log
