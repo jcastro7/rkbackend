@@ -11,7 +11,7 @@
 
     <appender name="BACKEND" class="ch.qos.logback.core.rolling.RollingFileAppender">
 
-		<file>C:\logs\runakuna-be.log</file>
+		<file>runakuna-be.log</file>
 
         <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
             <fileNamePattern>/home/tss/logs/runakuna-be-${myTimestamp}.%i.zip</fileNamePattern>

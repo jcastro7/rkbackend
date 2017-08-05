@@ -89,7 +89,7 @@ public class LoginJdbcRepository implements LoginRepository{
 		StringBuilder sql = new StringBuilder();
         
         sql.append(" select r.Nombre as roleName, r.Descripcion as roleDescription, case when (x.IdRol is NULL) then 0 else 1 end as assigned, ");
-        sql.append(" case when isnull(x.PorDefecto,0) = 0 THEN 0 else x.PorDefecto end as roleDefault ");
+        sql.append(" case when COALESCE(x.PorDefecto,0) = 0 THEN 0 else x.PorDefecto end as roleDefault ");
         sql.append(" from Rol r ");
         sql.append(" left join  ");
         sql.append(" (select IdRol,PorDefecto from UsuarioRol ur where ");
