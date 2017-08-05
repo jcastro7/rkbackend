@@ -181,12 +181,13 @@ public class UsuarioJdbcRepository implements UsuarioRepository{
 		sql.append(" u.Email AS email ");
 		
 		sql.append(" FROM Usuario u ");
-        
+
         sql.append(" WHERE 1=1 ");
-        sql.append(params.filter(" AND UPPER(u.CuentaUsuario) LIKE ('%'+ :cuentaUsuario +'%') ",filterViewModel.getValue()));
-        sql.append(params.filter(" OR UPPER(u.Nombre) LIKE  UPPER ('%'+ :nombre +'%') ",filterViewModel.getValue()));
-        sql.append(params.filter(" OR UPPER(u.ApellidoPaterno) LIKE  UPPER ('%'+ :apellidoPaterno +'%') ",filterViewModel.getValue()));
-        sql.append(params.filter(" OR UPPER(u.ApellidoMaterno) LIKE  UPPER ('%'+ :apellidoMaterno +'%') ",filterViewModel.getValue()));
+
+        sql.append(params.filter(" AND UPPER(u.CuentaUsuario) LIKE UPPER(CONCAT('%', :cuentaUsuario, '%'))",filterViewModel.getValue()));
+        sql.append(params.filter(" OR UPPER(u.Nombre) LIKE UPPER(CONCAT('%', :nombre, '%'))",filterViewModel.getValue()));
+        sql.append(params.filter(" OR UPPER(u.ApellidoPaterno) LIKE UPPER(CONCAT('%', :apellidoPaterno, '%'))",filterViewModel.getValue()));
+        sql.append(params.filter(" OR UPPER(u.ApellidoMaterno) LIKE UPPER(CONCAT('%', :apellidoMaterno, '%'))",filterViewModel.getValue()));
         
         
         return sql.toString();

@@ -176,7 +176,7 @@ public class WhereParams {
         int idx = sqlFilter.indexOf(':');
 
         if (idx < 0) throw new ParamNameNotFound(sqlFilter);
-        int idx2 = StringUtil.firstIdx(sqlFilter, idx, " ", ")", "\n", "\t");
+        int idx2 = StringUtil.firstIdx(sqlFilter, idx, " ", ")", ",", "\n", "\t");
         if (idx2 < 0) idx2 = sqlFilter.length();
         return sqlFilter.substring(idx + 1, idx2);
     }
